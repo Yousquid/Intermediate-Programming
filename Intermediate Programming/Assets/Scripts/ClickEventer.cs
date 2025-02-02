@@ -16,7 +16,7 @@ public class ClickEventer : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             ClickedObjectDetection();
-            ClickInteractions();
+           
         }
     }
 
@@ -45,8 +45,14 @@ public class ClickEventer : MonoBehaviour
                 {
                     secondObjectClicked = hit.collider.gameObject;
 
-                  
+                if (secondObjectClicked != firstObjectClicked)
+                {
                     secondObjectPos = gridManager.GetGridPosition(worldPositionVector2);
+                    ClickInteractions();
+                }
+                else secondObjectClicked = null;
+                  
+                    
                 }
                 else if (secondObjectClicked != null && firstObjectClicked != null)
                 {
@@ -67,11 +73,36 @@ public class ClickEventer : MonoBehaviour
     {
         if (gridManager.grid[firstObjectPos.x, firstObjectPos.y].objectType != "grass" && gridManager.grid[firstObjectPos.x, firstObjectPos.y].objectType != "none")
         {
-            if (secondObjectClicked != null)
+            //if (secondObjectClicked != null && secondObjectClicked != firstObjectClicked)
+            //{
+            //    objectToMove = firstObjectClicked;
+            //    MoveObjectToGrid(secondObjectPos);
+            //    ClearAllClickedObjects();
+            //}
+
+            if (gridManager.grid[firstObjectPos.x, firstObjectPos.y].objectType == "rabbit")
             {
-                objectToMove = firstObjectClicked;
-                MoveObjectToGrid(secondObjectPos);
-                ClearAllClickedObjects();
+                if (secondObjectPos.x == firstObjectPos.x + 1 || secondObjectPos.x == firstObjectPos.x - 1)
+                {
+                    if (secondObjectPos.y == firstObjectPos.y)
+                    {
+                        objectToMove = firstObjectClicked;
+                        MoveObjectToGrid(secondObjectPos);
+                        ClearAllClickedObjects();
+                    }
+                    else ClearAllClickedObjects();
+                }
+                else if (secondObjectPos.y == firstObjectPos.y + 1 || secondObjectPos.y == firstObjectPos.y - 1)
+                {
+                    if (secondObjectPos.x == firstObjectPos.x)
+                    {
+                        objectToMove = firstObjectClicked;
+                        MoveObjectToGrid(secondObjectPos);
+                        ClearAllClickedObjects();
+                    }
+                    else ClearAllClickedObjects();
+                }
+                else ClearAllClickedObjects();
             }
         }
     }
