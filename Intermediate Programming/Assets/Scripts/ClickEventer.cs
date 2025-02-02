@@ -3,18 +3,95 @@ using UnityEngine;
 public class ClickEventer : MonoBehaviour
 {
     public GridManager gridManager;
+    public GameObject firstObjectClicked;
+    public GameObject secondObjectClicked;
+    public Vector2Int firstObjectPos;
+    public Vector2Int secondObjectPos;
 
+    public GameObject objectToMove;
     void Update()
     {
-        if (Input.GetMouseButtonDown(0)) // Left mouse button click
+        
+
+        if (Input.GetMouseButtonDown(0))
         {
+            ClickedObjectDetection();
+            ClickInteractions();
+        }
+    }
+
+    public void ClickedObjectDetection()
+    {
+        
             Vector2 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(worldPosition, Vector2.zero);
 
+            Vector3 worldPositionVector2 = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            worldPositionVector2.z = 0; // Ignore depth
+            
             if (hit.collider != null)
             {
-                Debug.Log("Hit object: " + hit.collider.gameObject.name);
+                if (secondObjectClicked == null && firstObjectClicked == null)
+                {
+                    firstObjectClicked = hit.collider.gameObject;
+
+                    if (firstObjectClicked.tag != "grid")
+                    {
+                        firstObjectPos = gridManager.GetGridPosition(worldPositionVector2);
+                    }
+                    else firstObjectClicked = null;
+                }
+                else if (secondObjectClicked == null && firstObjectClicked != null && secondObjectClicked != firstObjectClicked)
+                {
+                    secondObjectClicked = hit.collider.gameObject;
+
+                  
+                    secondObjectPos = gridManager.GetGridPosition(worldPositionVector2);
+                }
+                else if (secondObjectClicked != null && firstObjectClicked != null)
+                {
+                    firstObjectClicked = hit.collider.gameObject;
+                    firstObjectPos = gridManager.GetGridPosition(worldPositionVector2);
+                    secondObjectClicked = null;
+                }
+            }
+            else if (hit.collider == null)
+            {
+                firstObjectClicked = null;
+                secondObjectClicked = null;
+            }
+        
+    }
+
+    public void ClickInteractions()
+    {
+        if (gridManager.grid[firstObjectPos.x, firstObjectPos.y].objectType != "grass" && gridManager.grid[firstObjectPos.x, firstObjectPos.y].objectType != "none")
+        {
+            if (secondObjectClicked != null)
+            {
+                objectToMove = firstObjectClicked;
+                MoveObjectToGrid(secondObjectPos);
+                ClearAllClickedObjects();
             }
         }
+    }
+
+    void MoveObjectToGrid(Vector2Int gridPos)
+    {
+        if (objectToMove != null)
+        {
+            gridManager.SetCell(gridPos.x, gridPos.y, gridManager.grid[firstObjectPos.x, firstObjectPos.y].content, 
+             gridManager.grid[firstObjectPos.x, firstObjectPos.y].objectType);
+            gridManager.RemoveContent(firstObjectPos.x, firstObjectPos.y);
+            Destroy(firstObjectClicked);
+            objectToMove = null;
+
+        }
+    }
+
+    void ClearAllClickedObjects()
+    {
+        firstObjectClicked = null;
+        secondObjectClicked = null;
     }
 }

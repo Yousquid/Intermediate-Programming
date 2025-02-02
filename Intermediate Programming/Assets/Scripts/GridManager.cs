@@ -7,8 +7,10 @@ public class GridManager : MonoBehaviour
 
     public GameObject backgroundPrefab;  // Prefab for the background tile sprite
     public float cellSize = 1.0f;        // Size of each grid cell (adjust if needed)
+    public Vector3 gridOrigin; // Starting position of the grid
 
-    private GridCell[,] grid;
+
+    public GridCell[,] grid;
 
     public GameObject grass;
     public GameObject rabbit;
@@ -18,6 +20,7 @@ public class GridManager : MonoBehaviour
         // Initialize the grid
         grid = new GridCell[gridWidth, gridHeight];
         InitializeGrid();
+        this.transform.position += new Vector3(-4, -4, 0);
     }
 
     // Initialize the grid with background tiles
@@ -27,7 +30,7 @@ public class GridManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.A))
         {
             SetCell(Random.Range(0, gridWidth), Random.Range(0, gridHeight), grass,  "grass");
-            print(grid[2, 3].isOccupied);
+           
             SetCell(2, 3, grass,  "grass");
             SetCell(Random.Range(0, gridWidth), Random.Range(0, gridHeight), rabbit,  "rabbit");
             
@@ -63,8 +66,9 @@ public class GridManager : MonoBehaviour
               
                 if (grid[x, y].content == grass && !grid[x, y].isOccupied)
                 {
-                    GameObject backgroundTile = Instantiate(grass, new Vector3(x * cellSize, y * cellSize, 0), Quaternion.identity);
-                    backgroundTile.transform.parent = transform;
+                    //"-4" means the offset of the camera center, same with the value at the start
+                    GameObject Grass = Instantiate(grass, new Vector3(x * cellSize -4, y * cellSize-4, 0), Quaternion.identity);
+                    Grass.transform.parent = transform;
                     grid[x, y].isOccupied = true;
                 }
                 //else if (grid[x, y].content == null)
@@ -74,8 +78,8 @@ public class GridManager : MonoBehaviour
                 //}
                 else if (grid[x, y].content == rabbit && !grid[x, y].isOccupied)
                 {
-                    GameObject backgroundTile = Instantiate(rabbit, new Vector3(x * cellSize, y * cellSize, 0), Quaternion.identity);
-                    backgroundTile.transform.parent = transform;
+                    GameObject Rabbit = Instantiate(rabbit, new Vector3(x * cellSize-4, y * cellSize-4, 0), Quaternion.identity);
+                    Rabbit.transform.parent = transform;
                     grid[x, y].isOccupied = true;
                 }
 
@@ -107,7 +111,9 @@ public class GridManager : MonoBehaviour
     {
         if (x >= 0 && x < gridWidth && y >= 0 && y < gridHeight)
         {
-            grid[x, y] = new GridCell();  // Reset to empty cell
+            SetCell(x, y, null, "none");  // Reset to empty cell
+            GameObject backgroundTile = Instantiate(backgroundPrefab, new Vector3(x * cellSize-4, y * cellSize-4, 0), Quaternion.identity);
+            backgroundTile.transform.parent = transform;
         }
     }
 
@@ -115,5 +121,18 @@ public class GridManager : MonoBehaviour
     public bool IsCellOccupied(int x, int y)
     {
         return grid[x, y].isOccupied;
+    }
+
+    public Vector2Int GetGridPosition(Vector3 worldPosition)
+    {
+        int x = Mathf.RoundToInt((worldPosition.x - gridOrigin.x) / cellSize);
+        int y = Mathf.RoundToInt((worldPosition.y - gridOrigin.y) / cellSize);
+
+        return new Vector2Int(x, y);
+    }
+
+    public Vector3 GetWorldPosition(Vector2Int gridPos)
+    {
+        return new Vector3(gridOrigin.x + gridPos.x * cellSize, gridOrigin.y + gridPos.y * cellSize, 0);
     }
 }

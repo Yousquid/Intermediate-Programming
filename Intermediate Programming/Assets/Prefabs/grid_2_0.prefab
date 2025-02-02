@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8184201070386827956}
   m_Layer: 0
   m_Name: grid_2_0
-  m_TagString: Untagged
+  m_TagString: grid
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

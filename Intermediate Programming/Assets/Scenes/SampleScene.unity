@@ -367,7 +367,7 @@ Transform:
   m_GameObject: {fileID: 902760364}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -14, y: -8, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -389,6 +389,7 @@ MonoBehaviour:
   gridHeight: 10
   backgroundPrefab: {fileID: 5783009509941869197, guid: 0bbe955b5b4150744bcd673388ace7eb, type: 3}
   cellSize: 0.9
+  gridOrigin: {x: -4, y: -4, z: 0}
   grass: {fileID: 2364012115976869068, guid: a7adb100e02352947a15e7655c0c1750, type: 3}
   rabbit: {fileID: 5129280481589890241, guid: 2b58d2a4af9839944b42cbd6161eb126, type: 3}
 --- !u!114 &902760368
@@ -404,6 +405,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gridManager: {fileID: 902760367}
+  firstObjectClicked: {fileID: 0}
+  secondObjectClicked: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
