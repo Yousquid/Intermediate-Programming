@@ -147,11 +147,18 @@ public class GridManager : MonoBehaviour
                 if (grid[x, y].objectType == "grass")
                 {
                     grid[x, y].content.GetComponent<GridContentTrigger>().leftResource -=
-                        CountSorroundingGridsOfObjectType(grid, x, y, "rabbit");
-                    resourceManager.food += CountSorroundingGridsOfObjectType(grid, x, y, "rabbit");
+                        CountSorroundingGridsOfObjectType(grid, x, y, "rabbit")*2;
+                    resourceManager.food += CountSorroundingGridsOfObjectType(grid, x, y, "rabbit")*2;
+                }
+                
+                if (grid[x, y].objectType == "rabbit")
+                {
+                    resourceManager.food += -1;
                 }
             }
         }
+
+        
     }
 
     public int CountSorroundingGridsOfObjectType(GridCell [,] grid, int x, int y, string objectType)
