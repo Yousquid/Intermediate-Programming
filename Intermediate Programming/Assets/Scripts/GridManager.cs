@@ -15,6 +15,8 @@ public class GridManager : MonoBehaviour
     public GameObject grass;
     public GameObject rabbit;
 
+    public ResourceManager resourceManager;
+
     void Start()
     {
         // Initialize the grid
@@ -134,5 +136,46 @@ public class GridManager : MonoBehaviour
     public Vector3 GetWorldPosition(Vector2Int gridPos)
     {
         return new Vector3(gridOrigin.x + gridPos.x * cellSize, gridOrigin.y + gridPos.y * cellSize, 0);
+    }
+
+    public void EndTurn()
+    {
+        for (int x = 0; x < gridWidth; x++)
+        {
+            for (int y = 0; y < gridHeight; y++)
+            {
+                if (grid[x, y].objectType == "grass")
+                {
+                    grid[x, y].content.GetComponent<GridContentTrigger>().leftResource -=
+                        CountSorroundingGridsOfObjectType(grid, x, y, "rabbit");
+                    resourceManager.food += CountSorroundingGridsOfObjectType(grid, x, y, "rabbit");
+                }
+            }
+        }
+    }
+
+    public int CountSorroundingGridsOfObjectType(GridCell [,] grid, int x, int y, string objectType)
+    {
+        int count = 0;
+        for (int w = -1; w < 2; w++)
+        {
+            for (int h = -1; h < 2; h++)
+            {
+                int neighborX = x + w;
+                int neighborY = y + h;
+                if (w == 0 && h == 0)
+                {
+                }
+                else if (neighborX < 0 || neighborY < 0 || neighborX >= grid.GetLength(0) || neighborY >= grid.GetLength(1))
+                {
+
+                }
+                else if (grid[neighborX, neighborY].objectType == objectType)
+                {
+                    count += 1;
+                }
+            }
+        }
+        return count;
     }
 }

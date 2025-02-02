@@ -5,11 +5,13 @@ public class GridCell
     public bool isOccupied;    // Whether the cell is currently occupied
     public string objectType;  // The type of object (optional, if you want to differentiate things like enemies, obstacles, etc.)
     public Sprite gridBackground;
-    public GridCell(GameObject content = null, bool isOccupied = false, string objectType = "")
+    public int action;
+    public GridCell(GameObject content = null, bool isOccupied = false, string objectType = "", int action = 1)
     {
         this.content = content;
         this.isOccupied = isOccupied;
         this.objectType = objectType;
+        this.action = action;
     }
 
 }

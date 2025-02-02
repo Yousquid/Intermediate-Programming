@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class TrunManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public bool isSelected = false;
+    public GridManager gridManager;
     void Start()
     {
         
@@ -14,8 +15,22 @@ public class TrunManager : MonoBehaviour
         
     }
 
-    public void HighligtDestinations()
-    { 
-        
+    public void NextTurn()
+    {
+        gridManager.EndTurn();
+
+        StartTurn();
+    }
+
+    void StartTurn()
+    {
+        for (int x = 0; x < gridManager.gridWidth; x++)
+        {
+            for (int y = 0; y < gridManager.gridHeight; y++)
+            {
+                gridManager.grid[x, y].action = 1;
+
+            }
+        }
     }
 }

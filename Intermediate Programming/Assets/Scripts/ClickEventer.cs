@@ -82,27 +82,32 @@ public class ClickEventer : MonoBehaviour
 
             if (gridManager.grid[firstObjectPos.x, firstObjectPos.y].objectType == "rabbit")
             {
-                if (secondObjectPos.x == firstObjectPos.x + 1 || secondObjectPos.x == firstObjectPos.x - 1)
+                if (gridManager.grid[firstObjectPos.x, firstObjectPos.y].action > 0)
                 {
-                    if (secondObjectPos.y == firstObjectPos.y)
+                    if (secondObjectPos.x == firstObjectPos.x + 1 || secondObjectPos.x == firstObjectPos.x - 1)
                     {
-                        objectToMove = firstObjectClicked;
-                        MoveObjectToGrid(secondObjectPos);
-                        ClearAllClickedObjects();
+                        if (secondObjectPos.y == firstObjectPos.y)
+                        {
+                            objectToMove = firstObjectClicked;
+                            MoveObjectToGrid(secondObjectPos);
+                            ClearAllClickedObjects();
+                        }
+                        else ClearAllClickedObjects();
                     }
-                    else ClearAllClickedObjects();
-                }
-                else if (secondObjectPos.y == firstObjectPos.y + 1 || secondObjectPos.y == firstObjectPos.y - 1)
-                {
-                    if (secondObjectPos.x == firstObjectPos.x)
+                    else if (secondObjectPos.y == firstObjectPos.y + 1 || secondObjectPos.y == firstObjectPos.y - 1)
                     {
-                        objectToMove = firstObjectClicked;
-                        MoveObjectToGrid(secondObjectPos);
-                        ClearAllClickedObjects();
+                        if (secondObjectPos.x == firstObjectPos.x)
+                        {
+                            objectToMove = firstObjectClicked;
+                            MoveObjectToGrid(secondObjectPos);
+                            ClearAllClickedObjects();
+                        }
+                        else ClearAllClickedObjects();
                     }
                     else ClearAllClickedObjects();
                 }
                 else ClearAllClickedObjects();
+
             }
         }
     }
@@ -114,6 +119,7 @@ public class ClickEventer : MonoBehaviour
             gridManager.SetCell(gridPos.x, gridPos.y, gridManager.grid[firstObjectPos.x, firstObjectPos.y].content, 
              gridManager.grid[firstObjectPos.x, firstObjectPos.y].objectType);
             gridManager.RemoveContent(firstObjectPos.x, firstObjectPos.y);
+            gridManager.grid[gridPos.x, gridPos.y].action -= 1;
             Destroy(firstObjectClicked);
             objectToMove = null;
 
