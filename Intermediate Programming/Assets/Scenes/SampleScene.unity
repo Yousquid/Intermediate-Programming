@@ -349,8 +349,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 902760366}
-  - component: {fileID: 902760365}
   - component: {fileID: 902760367}
+  - component: {fileID: 902760368}
   m_Layer: 0
   m_Name: Grid
   m_TagString: Untagged
@@ -358,26 +358,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &902760365
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 902760364}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85b68ddcc9e40bd45b8c0d2fba790410, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TILE_SIZE: 0.45
-  wallPrefab: {fileID: 5783009509941869197, guid: 0bbe955b5b4150744bcd673388ace7eb, type: 3}
-  gridWidth: 30
-  gridHeight: 15
-  gridDensity: 0
-  overflowMaxNeighborsNumber: 0
-  lonelyMinimumNeighborsNumber: 0
-  groupMinimumNeighborsNumber: 0
 --- !u!4 &902760366
 Transform:
   m_ObjectHideFlags: 0
@@ -387,7 +367,7 @@ Transform:
   m_GameObject: {fileID: 902760364}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -10.81, y: -4.01, z: 0}
+  m_LocalPosition: {x: -14, y: -8, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -408,8 +388,22 @@ MonoBehaviour:
   gridWidth: 10
   gridHeight: 10
   backgroundPrefab: {fileID: 5783009509941869197, guid: 0bbe955b5b4150744bcd673388ace7eb, type: 3}
-  cellSize: 0.45
+  cellSize: 0.9
   grass: {fileID: 2364012115976869068, guid: a7adb100e02352947a15e7655c0c1750, type: 3}
+  rabbit: {fileID: 5129280481589890241, guid: 2b58d2a4af9839944b42cbd6161eb126, type: 3}
+--- !u!114 &902760368
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 902760364}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec6428a6f789e7348b003cabb5c6fa90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gridManager: {fileID: 902760367}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

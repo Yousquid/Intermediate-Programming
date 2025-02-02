@@ -11,6 +11,7 @@ public class GridManager : MonoBehaviour
     private GridCell[,] grid;
 
     public GameObject grass;
+    public GameObject rabbit;
 
     void Start()
     {
@@ -25,10 +26,18 @@ public class GridManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.A))
         {
-            SetCell(2, 3, grass, "grass");
-            print(grid[2, 3].objectType);
+            SetCell(Random.Range(0, gridWidth), Random.Range(0, gridHeight), grass,  "grass");
+            print(grid[2, 3].isOccupied);
+            SetCell(2, 3, grass,  "grass");
+            SetCell(Random.Range(0, gridWidth), Random.Range(0, gridHeight), rabbit,  "rabbit");
+            
         }
         GridImageUpdate();
+    }
+
+    private void LateUpdate()
+    {
+       
     }
     void InitializeGrid()
     {
@@ -42,6 +51,7 @@ public class GridManager : MonoBehaviour
                 CreateBackgroundTile(position);
             }
         }
+        
     }
 
     void GridImageUpdate()
@@ -50,20 +60,30 @@ public class GridManager : MonoBehaviour
         {
             for (int y = 0; y < gridHeight; y++)
             {
-                if (grid[x, y].content == grass)
+              
+                if (grid[x, y].content == grass && !grid[x, y].isOccupied)
                 {
                     GameObject backgroundTile = Instantiate(grass, new Vector3(x * cellSize, y * cellSize, 0), Quaternion.identity);
                     backgroundTile.transform.parent = transform;
+                    grid[x, y].isOccupied = true;
                 }
-                else if (grid[x, y].content == null)
+                //else if (grid[x, y].content == null)
+                //{
+                //    GameObject backgroundTile = Instantiate(backgroundPrefab, new Vector3(x * cellSize, y * cellSize, 0), Quaternion.identity);
+                //    backgroundTile.transform.parent = transform;
+                //}
+                else if (grid[x, y].content == rabbit && !grid[x, y].isOccupied)
                 {
-                    GameObject backgroundTile = Instantiate(backgroundPrefab, new Vector3(x * cellSize, y * cellSize, 0), Quaternion.identity);
+                    GameObject backgroundTile = Instantiate(rabbit, new Vector3(x * cellSize, y * cellSize, 0), Quaternion.identity);
                     backgroundTile.transform.parent = transform;
+                    grid[x, y].isOccupied = true;
                 }
 
             }
         }
     }
+
+
 
     // Create a background tile at the given position
     void CreateBackgroundTile(Vector3 position)
@@ -78,7 +98,7 @@ public class GridManager : MonoBehaviour
     {
         if (x >= 0 && x < gridWidth && y >= 0 && y < gridHeight)
         {
-            grid[x, y] = new GridCell(content, true, objectType);
+            grid[x, y] = new GridCell(content, false, objectType);
         }
     }
 
