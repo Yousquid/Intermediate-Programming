@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 
 public class ClickEventer : MonoBehaviour
@@ -71,8 +72,14 @@ public class ClickEventer : MonoBehaviour
 
     public void ClickInteractions()
     {
-        if (gridManager.grid[firstObjectPos.x, firstObjectPos.y].objectType != "grass" && gridManager.grid[firstObjectPos.x, firstObjectPos.y].objectType != "none")
+        if (gridManager.grid[firstObjectPos.x, firstObjectPos.y].objectType != "grass" && gridManager.grid[firstObjectPos.x, firstObjectPos.y].objectType != "none"
+            )
         {
+            if (gridManager.grid[secondObjectPos.x, secondObjectPos.y].isOccupied)
+            {
+                ClearAllClickedObjects();
+                return;
+            }
             //if (secondObjectClicked != null && secondObjectClicked != firstObjectClicked)
             //{
             //    objectToMove = firstObjectClicked;
@@ -80,31 +87,40 @@ public class ClickEventer : MonoBehaviour
             //    ClearAllClickedObjects();
             //}
 
+
             if (gridManager.grid[firstObjectPos.x, firstObjectPos.y].objectType == "rabbit")
             {
                 if (gridManager.grid[firstObjectPos.x, firstObjectPos.y].action > 0)
                 {
-                    if (secondObjectPos.x == firstObjectPos.x + 1 || secondObjectPos.x == firstObjectPos.x - 1)
+                    if ( AnimalMoveDestinations("rabbit", firstObjectPos).Contains(secondObjectPos))
                     {
-                        if (secondObjectPos.y == firstObjectPos.y)
-                        {
-                            objectToMove = firstObjectClicked;
-                            MoveObjectToGrid(secondObjectPos);
-                            ClearAllClickedObjects();
-                        }
-                        else ClearAllClickedObjects();
-                    }
-                    else if (secondObjectPos.y == firstObjectPos.y + 1 || secondObjectPos.y == firstObjectPos.y - 1)
-                    {
-                        if (secondObjectPos.x == firstObjectPos.x)
-                        {
-                            objectToMove = firstObjectClicked;
-                            MoveObjectToGrid(secondObjectPos);
-                            ClearAllClickedObjects();
-                        }
-                        else ClearAllClickedObjects();
+                        objectToMove = firstObjectClicked;
+                        MoveObjectToGrid(secondObjectPos);
+                        ClearAllClickedObjects();
                     }
                     else ClearAllClickedObjects();
+
+                    //if (secondObjectPos.x == firstObjectPos.x + 1 || secondObjectPos.x == firstObjectPos.x - 1)
+                    //{
+                    //    if (secondObjectPos.y == firstObjectPos.y)
+                    //    {
+                    //        objectToMove = firstObjectClicked;
+                    //        MoveObjectToGrid(secondObjectPos);
+                    //        ClearAllClickedObjects();
+                    //    }
+                    //    else ClearAllClickedObjects();
+                    //}
+                    //else if (secondObjectPos.y == firstObjectPos.y + 1 || secondObjectPos.y == firstObjectPos.y - 1)
+                    //{
+                    //    if (secondObjectPos.x == firstObjectPos.x)
+                    //    {
+                    //        objectToMove = firstObjectClicked;
+                    //        MoveObjectToGrid(secondObjectPos);
+                    //        ClearAllClickedObjects();
+                    //    }
+                    //    else ClearAllClickedObjects();
+                    //}
+                    //else ClearAllClickedObjects();
                 }
                 else ClearAllClickedObjects();
 
@@ -130,5 +146,30 @@ public class ClickEventer : MonoBehaviour
     {
         firstObjectClicked = null;
         secondObjectClicked = null;
+    }
+
+    public Vector2Int[] AnimalMoveDestinations( string animalType, Vector2Int animalPoisition)
+    {
+        if (animalType == "rabbit")
+        {
+            Vector2Int[] animalMoveDestinations = new Vector2Int[4];
+            animalMoveDestinations[0] = new Vector2Int(animalPoisition.x - 1, animalPoisition.y);
+            animalMoveDestinations[1] = new Vector2Int(animalPoisition.x + 1, animalPoisition.y);
+            animalMoveDestinations[2] = new Vector2Int(animalPoisition.x , animalPoisition.y + 1);
+            animalMoveDestinations[3] = new Vector2Int(animalPoisition.x , animalPoisition.y - 1);
+            return animalMoveDestinations;
+        }
+        else return new Vector2Int[0];
+    }
+    public void SelectionGridHighlight()
+    {
+        if (firstObjectClicked != null && gridManager.grid[firstObjectPos.x, firstObjectPos.y].objectType != "grass"
+            && gridManager.grid[firstObjectPos.x, firstObjectPos.y].objectType != "none")
+        {
+            foreach (Vector2Int highlightGrid in AnimalMoveDestinations(gridManager.grid[firstObjectPos.x, firstObjectPos.y].objectType, firstObjectPos))
+            { 
+            
+            }
+        }
     }
 }

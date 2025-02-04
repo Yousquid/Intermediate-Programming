@@ -125,6 +125,10 @@ public class GridManager : MonoBehaviour
         return grid[x, y].isOccupied;
     }
 
+    public void SetCellHighlighted(Vector2Int highlightPos)
+    {
+       // grid[highlightPos.x, highlightPos.y].content = null;
+    }
     public Vector2Int GetGridPosition(Vector3 worldPosition)
     {
         int x = Mathf.RoundToInt((worldPosition.x - gridOrigin.x) / cellSize);
