@@ -51,27 +51,7 @@ public class GridGenerator : MonoBehaviour
         // Keep in mind that this will be the starting point for the CA steps.
 
     }
-    Vector2Int GetPlayerSpawnPos()
-    {
-        // Your code for 2-a here:
-        int xSpwanCoordinate;
-        int ySpwanCoordinate;
-
-        do
-        {
-            xSpwanCoordinate = Random.Range(1, gridWidth);
-            ySpwanCoordinate = Random.Range(1, gridHeight);
-        }
-        while (_wallGrid[xSpwanCoordinate, ySpwanCoordinate] == true);
-
-        if (_wallGrid[xSpwanCoordinate, ySpwanCoordinate] != true)
-        {
-            return new Vector2Int(xSpwanCoordinate, ySpwanCoordinate);
-        }
-        else return Vector2Int.zero;
-        // Default implementation: You'll want to replace this
-    }
-
+    
     bool NextCAValue(int x, int y)
     {
         // Your code for 2-b here:
@@ -128,29 +108,6 @@ public class GridGenerator : MonoBehaviour
         return count;
     }
 
-    void PerformCAStep()
-    {
-        // How a CA step is performed.
-
-        // First, we create the next grid by using nextCAValue for each grid location.
-        for (int x = 0; x < gridWidth; x++)
-        {
-            for (int y = 0; y < gridHeight; y++)
-            {
-                _nextWallGrid[x, y] = NextCAValue(x, y);
-            }
-        }
-
-        // Then we update the current grid to match _nextWallGrid
-        for (int x = 0; x < gridWidth; x++)
-        {
-            for (int y = 0; y < gridHeight; y++)
-            {
-                _wallGrid[x, y] = _nextWallGrid[x, y];
-            }
-        }
-    }
-
 
 
     void RespawnWalls()
@@ -192,7 +149,7 @@ public class GridGenerator : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.Space))
         {
-            PerformCAStep();
+
             RespawnWalls();
         }
     }

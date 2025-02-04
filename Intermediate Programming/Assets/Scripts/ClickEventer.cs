@@ -12,13 +12,15 @@ public class ClickEventer : MonoBehaviour
     public GameObject objectToMove;
     void Update()
     {
-        
+       
 
         if (Input.GetMouseButtonDown(0))
         {
+            gridManager.ClearAllHightlights();
             ClickedObjectDetection();
            
         }
+        SelectionGridHighlight();
     }
 
     public void ClickedObjectDetection()
@@ -167,9 +169,15 @@ public class ClickEventer : MonoBehaviour
             && gridManager.grid[firstObjectPos.x, firstObjectPos.y].objectType != "none")
         {
             foreach (Vector2Int highlightGrid in AnimalMoveDestinations(gridManager.grid[firstObjectPos.x, firstObjectPos.y].objectType, firstObjectPos))
-            { 
-            
+            {
+                gridManager.SetCellHighlighted(highlightGrid);
             }
+        }
+
+        else if (firstObjectClicked == null || gridManager.grid[firstObjectPos.x, firstObjectPos.y].objectType == "grass"
+            || gridManager.grid[firstObjectPos.x, firstObjectPos.y].objectType == "none")
+        {
+            gridManager.ClearAllHightlights();
         }
     }
 }

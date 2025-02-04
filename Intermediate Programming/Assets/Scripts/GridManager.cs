@@ -1,3 +1,4 @@
+using UnityEditor.SearchService;
 using UnityEngine;
 
 public class GridManager : MonoBehaviour
@@ -14,6 +15,7 @@ public class GridManager : MonoBehaviour
 
     public GameObject grass;
     public GameObject rabbit;
+    public GameObject highlight;
 
     public ResourceManager resourceManager;
 
@@ -84,6 +86,7 @@ public class GridManager : MonoBehaviour
                     Rabbit.transform.parent = transform;
                     grid[x, y].isOccupied = true;
                 }
+                
 
             }
         }
@@ -127,8 +130,33 @@ public class GridManager : MonoBehaviour
 
     public void SetCellHighlighted(Vector2Int highlightPos)
     {
-       // grid[highlightPos.x, highlightPos.y].content = null;
+        if (grid[highlightPos.x, highlightPos.y].content != highlight && !grid[highlightPos.x, highlightPos.y].isOccupied)
+        {
+            GameObject Hightlight = Instantiate(highlight, new Vector3(highlightPos.x * cellSize - 4, highlightPos.y * cellSize - 4, 0), Quaternion.identity);
+            grid[highlightPos.x, highlightPos.y].content = highlight;
+            Hightlight.transform.parent = transform;
+        }
+        
     }
+
+    public void ClearAllHightlights()
+    {
+        for (int x = 0; x < gridWidth; x++)
+        {
+            for (int y = 0; y < gridHeight; y++)
+            {
+                if (grid[x, y].content == highlight)
+                {
+                    RemoveContent(x, y);
+                }
+            }
+        }
+        GameObject[] objects = GameObject.FindGameObjectsWithTag("highlight");
+        foreach (GameObject gamobject in objects)
+        { 
+            Destroy(gamobject);
+        }
+     }
     public Vector2Int GetGridPosition(Vector3 worldPosition)
     {
         int x = Mathf.RoundToInt((worldPosition.x - gridOrigin.x) / cellSize);
