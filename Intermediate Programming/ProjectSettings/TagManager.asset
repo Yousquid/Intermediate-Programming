@@ -6,6 +6,7 @@ TagManager:
   tags:
   - grid
   - rabbit
+  - highlight
   layers:
   - Default
   - TransparentFX
