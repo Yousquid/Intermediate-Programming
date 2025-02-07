@@ -12,7 +12,10 @@ public class ClickEventer : MonoBehaviour
     public GameObject objectToMove;
     void Update()
     {
-       
+        if (gridManager.grid[firstObjectPos.x, firstObjectPos.y].objectType == "none")
+        {
+            ClearAllClickedObjects();
+        }
 
         if (Input.GetMouseButtonDown(0))
         {
