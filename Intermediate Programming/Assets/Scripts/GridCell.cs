@@ -6,12 +6,16 @@ public class GridCell
     public string objectType;  // The type of object (optional, if you want to differentiate things like enemies, obstacles, etc.)
     public Sprite gridBackground;
     public int action;
-    public GridCell(GameObject content = null, bool isOccupied = false, string objectType = "", int action = 1)
+    public string backgroundType;
+    public bool hasBackground;
+    public GridCell(GameObject content = null, bool isOccupied = false, string objectType = "", int action = 1, string backgroundType = "", bool hasBackground = false)
     {
         this.content = content;
         this.isOccupied = isOccupied;
         this.objectType = objectType;
         this.action = action;
+        this.backgroundType = backgroundType;
+        this.hasBackground = hasBackground;
     }
 
 }
