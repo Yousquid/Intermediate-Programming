@@ -12,12 +12,16 @@ public class GridManager : MonoBehaviour
 
 
     public GridCell[,] grid;
+    public GameObject[,] gridObject;
 
     public GameObject grass;
     public GameObject rabbit;
     public GameObject highlight;
+    public GameObject mateSign;
 
     public ResourceManager resourceManager;
+
+    private bool hasMateSignSpawned = false;
 
     void Start()
     {
@@ -74,6 +78,7 @@ public class GridManager : MonoBehaviour
                     GameObject Grass = Instantiate(grass, new Vector3(x * cellSize -4, y * cellSize-4, 0), Quaternion.identity);
                     Grass.transform.parent = transform;
                     grid[x, y].isOccupied = true;
+                    
                 }
                 //else if (grid[x, y].content == null)
                 //{
@@ -117,8 +122,8 @@ public class GridManager : MonoBehaviour
         if (x >= 0 && x < gridWidth && y >= 0 && y < gridHeight)
         {
             SetCell(x, y, null, "none");  // Reset to empty cell
-            GameObject backgroundTile = Instantiate(backgroundPrefab, new Vector3(x * cellSize-4, y * cellSize-4, 0), Quaternion.identity);
-            backgroundTile.transform.parent = transform;
+           // GameObject backgroundTile = Instantiate(backgroundPrefab, new Vector3(x * cellSize-4, y * cellSize-4, 0), Quaternion.identity);
+          //  backgroundTile.transform.parent = transform;
         }
     }
 
@@ -138,6 +143,15 @@ public class GridManager : MonoBehaviour
         }
         
     }
+    public void SetCellMateSign(Vector2Int highlightPos)
+    {
+        if (!hasMateSignSpawned)
+        {
+            GameObject MateSign = Instantiate(mateSign, new Vector3(highlightPos.x * cellSize - 4, highlightPos.y * cellSize - 4, 0), Quaternion.identity);
+            MateSign.transform.parent = transform;
+            hasMateSignSpawned = true;
+        }
+    }
 
     public void ClearAllHightlights()
     {
@@ -156,7 +170,13 @@ public class GridManager : MonoBehaviour
         { 
             Destroy(gamobject);
         }
-     }
+        GameObject[] mateObjects = GameObject.FindGameObjectsWithTag("matesign");
+        foreach (GameObject gamobject in mateObjects)
+        {
+            Destroy(gamobject);
+        }
+        hasMateSignSpawned = false;
+    }
     public Vector2Int GetGridPosition(Vector3 worldPosition)
     {
         int x = Mathf.RoundToInt((worldPosition.x - gridOrigin.x) / cellSize);
@@ -217,4 +237,5 @@ public class GridManager : MonoBehaviour
         }
         return count;
     }
+
 }
