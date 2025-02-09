@@ -91,13 +91,16 @@ public class ClickEventer : MonoBehaviour
                                 gridManager.SetCell(firstObjectPos.x + x, firstObjectPos.y + y, gridManager.rabbit, "rabbit");
                                 gridManager.grid[firstObjectPos.x, firstObjectPos.y].action -= 1;
                                 gridManager.grid[firstObjectPos.x + x, firstObjectPos.y + y].action--;
+                                gridManager.grid[secondObjectPos.x, secondObjectPos.y].action--;
                                 break;
                             }
+                            
                         }
                     }
+                    break;
                 }
             }
-            if (ValidAnimalMove("rabbit", firstObjectPos, secondObjectPos))
+            else if (ValidAnimalMove("rabbit", firstObjectPos, secondObjectPos))
             {
                 objectToMove = firstObjectClicked;
                 MoveObjectToGrid(secondObjectPos);
