@@ -7,8 +7,10 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI foodNumberText;
     public GridManager gridManager;
     public TrunManager trunManager;
+    public ClickEventer clickEventer;
     public TextMeshProUGUI animalSpecialAbilityButtonText;
     public GameObject animalSpecialAbilityButton;
+    public TextMeshProUGUI actionText;
     public float timer = 0;
     public bool isHiding = false;
     void Start()
@@ -20,6 +22,9 @@ public class UIManager : MonoBehaviour
     void Update()
     {
         foodNumberText.text = "Food: " + food;
+
+        actionText.text = "Action:" + gridManager.grid[clickEventer.firstObjectPos.x, clickEventer.firstObjectPos.y].action + "/1";
+
         if (isHiding)
         {
             timer += Time.deltaTime;
