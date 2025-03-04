@@ -26,6 +26,7 @@ public class ClickEventer : MonoBehaviour
         {
             gridManager.ClearAllHightlights();
             DetectClickedObject();
+            SoundManager.instance.PlaySound("Click");
         }
 
         HighlightSelectionGrid();

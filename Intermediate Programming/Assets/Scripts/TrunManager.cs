@@ -18,6 +18,7 @@ public class TrunManager : MonoBehaviour
     public void NextTurn()
     {
         gridManager.EndTurn();
+        SoundManager.instance.PlaySound("EndTurn");
 
         StartTurn();
     }
