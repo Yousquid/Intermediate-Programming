@@ -29,7 +29,8 @@ public class GridManager : MonoBehaviour
         // Initialize the grid
         grid = new GridCell[gridWidth, gridHeight];
         InitializeGrid();
-        this.transform.position += new Vector3(-4, -4, 0);
+       // this.transform.position += gridOrigin;
+
     }
 
     // Initialize the grid with background tiles

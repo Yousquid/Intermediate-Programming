@@ -93,6 +93,7 @@ public class ClickEventer : MonoBehaviour
 
     private void HandleClickInteractions()
     {
+        //Check if the target position is occupied, if it is, cannot move to that position
         if (gridManager.grid[firstObjectPos.x, firstObjectPos.y].objectType == "none" ||
             gridManager.grid[firstObjectPos.x, firstObjectPos.y].objectType == "grass" )
         {
@@ -103,12 +104,13 @@ public class ClickEventer : MonoBehaviour
             return;
         }
 
+        //If the moving animal is the rabbit, check its movement & mating
         if (gridManager.grid[firstObjectPos.x, firstObjectPos.y].objectType == "rabbit" &&
             gridManager.grid[firstObjectPos.x, firstObjectPos.y].action > 0)
         {
             //SPAWN A NEW RABBIT IF CAN MATE AND WALK ONTO ANOTHER RABBIT
-            if (ValidAnimalMove("rabbit", firstObjectPos, secondObjectPos) && 
-                gridManager.grid[firstObjectPos.x, firstObjectPos.y].objectType == 
+            if (ValidAnimalMove("rabbit", firstObjectPos, secondObjectPos) &&
+                gridManager.grid[firstObjectPos.x, firstObjectPos.y].objectType ==
                 gridManager.grid[secondObjectPos.x, secondObjectPos.y].objectType)
             {
                 for (int x = -1; x < 2; x++)
@@ -140,24 +142,34 @@ public class ClickEventer : MonoBehaviour
                                     gridManager.grid[firstObjectPos.x + x, firstObjectPos.y + y].action--;
                                     gridManager.grid[secondObjectPos.x, secondObjectPos.y].action--;
                                 }
-                                
-      
+
+
                                 break;
                             }
-                            
+
                         }
                     }
                     break;
                 }
             }
-            //MOVE THE RABBIT
+
+            //Cannot move if the target hole is occupied
+            else if (gridManager.grid[secondObjectPos.x, secondObjectPos.y].backgroundType == "hole"
+                && gridManager.grid[buildingManager.GiveAnotherHolePosition(secondObjectPos).x, buildingManager.GiveAnotherHolePosition(secondObjectPos).y].isOccupied)
+            {
+                ClearAllClickedObjects();
+                return;
+            }
+
             else if (ValidAnimalMove("rabbit", firstObjectPos, secondObjectPos))
             {
+                //MOVE THE RABBIT
                 objectToMove = firstObjectClicked;
                 MoveObjectToGrid(secondObjectPos);
             }
         }
 
+        
         ClearAllClickedObjects();
     }
 
@@ -174,9 +186,14 @@ public class ClickEventer : MonoBehaviour
                 string targetBackgrouObjectType = gridManager.grid[targetPos.x, targetPos.y].backgroundType;
                 bool targetHasBackground = gridManager.grid[targetPos.x, targetPos.y].hasBackground;
                 Vector2Int holeTarget = buildingManager.GiveAnotherHolePosition(targetPos);
-                gridManager.SetCell(holeTarget.x, holeTarget.y,
-                gridManager.grid[firstObjectPos.x, firstObjectPos.y].content,
-                gridManager.grid[firstObjectPos.x, firstObjectPos.y].objectType, targetBackgrouObjectType, targetHasBackground);
+                if (!gridManager.grid[holeTarget.x, holeTarget.y].isOccupied)
+                {
+                    gridManager.SetCell(holeTarget.x, holeTarget.y,
+                    gridManager.grid[firstObjectPos.x, firstObjectPos.y].content,
+                    gridManager.grid[firstObjectPos.x, firstObjectPos.y].objectType, targetBackgrouObjectType, targetHasBackground);
+                }
+                else ClearAllClickedObjects();
+
             }
         }
         //Move to the new cell by setting the content of the new grid
