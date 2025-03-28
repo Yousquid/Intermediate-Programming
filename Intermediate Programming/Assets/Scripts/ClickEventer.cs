@@ -119,10 +119,29 @@ public class ClickEventer : MonoBehaviour
                         {
                             if (x != 0 && y != 0)
                             {
-                                gridManager.SetCell(firstObjectPos.x + x, firstObjectPos.y + y, gridManager.rabbit, "rabbit");
-                                gridManager.grid[firstObjectPos.x, firstObjectPos.y].action -= 1;
-                                gridManager.grid[firstObjectPos.x + x, firstObjectPos.y + y].action--;
-                                gridManager.grid[secondObjectPos.x, secondObjectPos.y].action--;
+                                if (gridManager.grid[firstObjectPos.x + x, firstObjectPos.y + y].backgroundType != "")
+                                {
+                                    string backgroundType = gridManager.grid[firstObjectPos.x + x, firstObjectPos.y + y].backgroundType;
+
+                                    if (gridManager.grid[firstObjectPos.x + x, firstObjectPos.y + y].hasBackground != false)
+                                    {
+                                        bool hasBackground = gridManager.grid[firstObjectPos.x + x, firstObjectPos.y + y].hasBackground;
+
+                                        gridManager.SetCell(firstObjectPos.x + x, firstObjectPos.y + y, gridManager.rabbit, "rabbit", backgroundType, hasBackground);
+                                        gridManager.grid[firstObjectPos.x, firstObjectPos.y].action -= 1;
+                                        gridManager.grid[firstObjectPos.x + x, firstObjectPos.y + y].action--;
+                                        gridManager.grid[secondObjectPos.x, secondObjectPos.y].action--;
+                                    }
+                                }
+                                else
+                                {
+                                    gridManager.SetCell(firstObjectPos.x + x, firstObjectPos.y + y, gridManager.rabbit, "rabbit", "", false);
+                                    gridManager.grid[firstObjectPos.x, firstObjectPos.y].action -= 1;
+                                    gridManager.grid[firstObjectPos.x + x, firstObjectPos.y + y].action--;
+                                    gridManager.grid[secondObjectPos.x, secondObjectPos.y].action--;
+                                }
+                                
+      
                                 break;
                             }
                             
@@ -153,23 +172,28 @@ public class ClickEventer : MonoBehaviour
             if (buildingManager.GiveAnotherHolePosition(targetPos) != Vector2Int.zero)
             {
                 string targetBackgrouObjectType = gridManager.grid[targetPos.x, targetPos.y].backgroundType;
+                bool targetHasBackground = gridManager.grid[targetPos.x, targetPos.y].hasBackground;
                 Vector2Int holeTarget = buildingManager.GiveAnotherHolePosition(targetPos);
                 gridManager.SetCell(holeTarget.x, holeTarget.y,
                 gridManager.grid[firstObjectPos.x, firstObjectPos.y].content,
-                gridManager.grid[firstObjectPos.x, firstObjectPos.y].objectType, targetBackgrouObjectType);
+                gridManager.grid[firstObjectPos.x, firstObjectPos.y].objectType, targetBackgrouObjectType, targetHasBackground);
             }
         }
         //Move to the new cell by setting the content of the new grid
         else
         {
             string targetBackgrouObjectType = gridManager.grid[targetPos.x, targetPos.y].backgroundType;
+            bool targetHasBackground = gridManager.grid[targetPos.x, targetPos.y].hasBackground;
+
             gridManager.SetCell(targetPos.x, targetPos.y,
                gridManager.grid[firstObjectPos.x, firstObjectPos.y].content,
-               gridManager.grid[firstObjectPos.x, firstObjectPos.y].objectType, targetBackgrouObjectType);
+               gridManager.grid[firstObjectPos.x, firstObjectPos.y].objectType, targetBackgrouObjectType, targetHasBackground);
         }
         //Remove the moved object in the orginal grid and induce the object's action
         string firstPosBackgroundType = gridManager.grid[firstObjectPos.x, firstObjectPos.y].backgroundType;
-        gridManager.RemoveContent(firstObjectPos.x, firstObjectPos.y, firstPosBackgroundType);
+        bool firstHasBackground = gridManager.grid[firstObjectPos.x, firstObjectPos.y].hasBackground;
+
+        gridManager.RemoveContent(firstObjectPos.x, firstObjectPos.y, firstPosBackgroundType, firstHasBackground);
         gridManager.grid[targetPos.x, targetPos.y].action--;
         Destroy(firstObjectClicked);
         objectToMove = null;

@@ -8,7 +8,7 @@ public class GridCell
     public int action;
     public string backgroundType;
     public bool hasBackground;
-    public GridCell(GameObject content = null, bool isOccupied = false, string objectType = "", int action = 1, string backgroundType = "", bool hasBackground = false)
+    public GridCell(GameObject content, bool isOccupied, string objectType, int action, string backgroundType, bool hasBackground)
     {
         this.content = content;
         this.isOccupied = isOccupied;

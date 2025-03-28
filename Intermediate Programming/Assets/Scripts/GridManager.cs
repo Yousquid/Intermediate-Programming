@@ -38,12 +38,11 @@ public class GridManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.A))
         {
-            SetCell(Random.Range(0, gridWidth), Random.Range(0, gridHeight), grass,  "grass");
+            SetCell(Random.Range(0, gridWidth), Random.Range(0, gridHeight), grass,  "grass","",false);
            
-            SetCell(2, 3, grass,  "grass");
-            SetCell(Random.Range(0, gridWidth), Random.Range(0, gridHeight), rabbit,  "rabbit");
+            SetCell(2, 3, grass,  "grass","",false);
+            SetCell(Random.Range(0, gridWidth), Random.Range(0, gridHeight), rabbit,  "rabbit","",false);
 
-            SetCell(3, 3, null, "none", "hole");
             
         }
         GridImageUpdate();
@@ -54,8 +53,8 @@ public class GridManager : MonoBehaviour
         {
             for (int y = 0; y < gridHeight; y++)
             {
-                grid[x, y] = new GridCell();
-                SetCell(x, y, null, "none");
+                grid[x, y] = new GridCell(null,false,"",0,"",false);
+                SetCell(x, y, null, "","",false);
                 Vector3 position = new Vector3(x * cellSize, y * cellSize, 0); // Calculate position of the background sprite
                 CreateBackgroundTile(position);
             }
@@ -78,11 +77,6 @@ public class GridManager : MonoBehaviour
                     grid[x, y].isOccupied = true;
                     
                 }
-                //else if (grid[x, y].content == null)
-                //{
-                //    GameObject backgroundTile = Instantiate(backgroundPrefab, new Vector3(x * cellSize, y * cellSize, 0), Quaternion.identity);
-                //    backgroundTile.transform.parent = transform;
-                //}
                 else if (grid[x, y].content == rabbit && !grid[x, y].isOccupied)
                 {
                     GameObject Rabbit = Instantiate(rabbit, new Vector3(x * cellSize-4, y * cellSize-4, 0), Quaternion.identity);
@@ -112,20 +106,20 @@ public class GridManager : MonoBehaviour
     }
 
     // Set the content of a specific grid cell
-    public void SetCell(int x, int y, GameObject content, string objectType = "", string backgrounType = "")
+    public void SetCell(int x, int y, GameObject content, string objectType, string backgrounType, bool hasBackground)
     {
         if (x >= 0 && x < gridWidth && y >= 0 && y < gridHeight)
         {
-            grid[x, y] = new GridCell(content, false, objectType, 1, backgrounType);
+            grid[x, y] = new GridCell(content, false, objectType, 1, backgrounType,hasBackground);
         }
     }
 
     // Remove content from a specific grid cell
-    public void RemoveContent(int x, int y, string backgrounType)
+    public void RemoveContent(int x, int y, string backgrounType,bool hasBackground)
     {
         if (x >= 0 && x < gridWidth && y >= 0 && y < gridHeight)
         {
-            SetCell(x, y, null, "none", backgrounType);  // Reset to empty cell
+            SetCell(x, y, null, "", backgrounType,hasBackground);  // Reset to empty cell
            // GameObject backgroundTile = Instantiate(backgroundPrefab, new Vector3(x * cellSize-4, y * cellSize-4, 0), Quaternion.identity);
           //  backgroundTile.transform.parent = transform;
         }
@@ -165,7 +159,9 @@ public class GridManager : MonoBehaviour
             {
                 if (grid[x, y].content == highlight)
                 {
-                    RemoveContent(x, y,"");
+                    string backgroundType = grid[x, y].backgroundType;
+                    bool hasBackground = grid[x, y].hasBackground;
+                    RemoveContent(x, y,backgroundType,hasBackground);
                 }
             }
         }
