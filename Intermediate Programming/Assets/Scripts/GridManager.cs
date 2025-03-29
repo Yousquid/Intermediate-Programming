@@ -18,6 +18,13 @@ public class GridManager : MonoBehaviour
 
     public GameObject rabbit;
     public GameObject wolf;
+    public GameObject boss_part_one;
+    public GameObject boss_part_two;
+    public GameObject boss_part_three;
+    public GameObject boss_part_four;
+
+    public Vector2Int bossPartOnePos =  Vector2Int.zero;
+    public Vector2Int bossPartFourPos = Vector2Int.zero;
 
     public GameObject highlight;
     public GameObject mateSign;
@@ -44,10 +51,12 @@ public class GridManager : MonoBehaviour
         {
             SetCell(Random.Range(0, gridWidth), Random.Range(0, gridHeight), grass,  "grass","",false);
            
-            SetCell(2, 3, grass,  "grass","",false);
+            SetCell(gridWidth-1, gridHeight-1, grass,  "grass","",false);
+
             SetCell(Random.Range(0, gridWidth), Random.Range(0, gridHeight), wolf,  "wolf","",false);
 
-            
+            SpwanBoss();
+
         }
         GridImageUpdate();
     }
@@ -95,6 +104,34 @@ public class GridManager : MonoBehaviour
                     Rabbit.transform.parent = transform;
                     grid[x, y].isOccupied = true;
                 }
+                else if (grid[x, y].content == boss_part_four && !grid[x, y].isOccupied)
+                {
+                    Vector3 spawnPos = gridOrigin + new Vector3(x * cellSize, y * cellSize, 0);
+                    GameObject Rabbit = Instantiate(boss_part_four, spawnPos, Quaternion.identity);
+                    Rabbit.transform.parent = transform;
+                    grid[x, y].isOccupied = true;
+                }
+                else if (grid[x, y].content == boss_part_one && !grid[x, y].isOccupied)
+                {
+                    Vector3 spawnPos = gridOrigin + new Vector3(x * cellSize, y * cellSize, 0);
+                    GameObject Rabbit = Instantiate(boss_part_one, spawnPos, Quaternion.identity);
+                    Rabbit.transform.parent = transform;
+                    grid[x, y].isOccupied = true;
+                }
+                else if (grid[x, y].content == boss_part_two && !grid[x, y].isOccupied)
+                {
+                    Vector3 spawnPos = gridOrigin + new Vector3(x * cellSize, y * cellSize, 0);
+                    GameObject Rabbit = Instantiate(boss_part_two, spawnPos, Quaternion.identity);
+                    Rabbit.transform.parent = transform;
+                    grid[x, y].isOccupied = true;
+                }
+                else if (grid[x, y].content == boss_part_three && !grid[x, y].isOccupied)
+                {
+                    Vector3 spawnPos = gridOrigin + new Vector3(x * cellSize, y * cellSize, 0);
+                    GameObject Rabbit = Instantiate(boss_part_three, spawnPos, Quaternion.identity);
+                    Rabbit.transform.parent = transform;
+                    grid[x, y].isOccupied = true;
+                }
 
                 if (grid[x, y].backgroundType == "hole" && !grid[x, y].hasBackground)
                 {
@@ -107,7 +144,74 @@ public class GridManager : MonoBehaviour
         }
     }
 
-
+    void SpwanBoss()
+    {
+        int direction = Random.Range(1, 4);
+        if (direction == 1)
+        {
+            int distance = Random.Range(1, gridWidth - 2);
+            while (grid[distance, 0].isOccupied || grid[distance + 1, 0].isOccupied)
+            {
+                 distance = Random.Range(1, gridWidth - 2);
+            }
+            if (!grid[distance, 0].isOccupied && !grid[distance + 1, 0].isOccupied)
+            {
+                SetCell(distance, gridHeight -1, boss_part_one, "boss_part_one", "", false);
+                SetCell(distance + 1, gridHeight - 1, boss_part_two, "boss_part_two", "", false);
+                SetCell(distance, gridHeight - 2, boss_part_three, "boss_part_three", "", false);
+                SetCell(distance, gridHeight - 2, boss_part_four, "boss_part_four", "", false);
+            }
+        }
+        else if (direction == 2)
+        {
+            int distance = Random.Range(1, gridHeight - 2);
+            while (grid[gridWidth-1, distance].isOccupied || grid[gridWidth - 1, distance+1].isOccupied)
+            {
+                 distance = Random.Range(1, gridHeight - 2);
+            }
+            if (!grid[gridWidth - 1, distance].isOccupied && !grid[gridWidth - 1, distance + 1].isOccupied)
+            {
+                SetCell(gridWidth - 1, distance, boss_part_four, "boss_part_four", "", false);
+                SetCell(gridWidth - 1, distance +1, boss_part_two, "boss_part_two", "", false);
+                SetCell(gridWidth - 2, distance, boss_part_three, "boss_part_three", "", false);
+                SetCell(gridWidth - 2, distance +1 , boss_part_one, "boss_part_one", "", false);
+            }
+        }
+        else if (direction == 3) // 下边（Bottom）
+        {
+            int distance = Random.Range(1, gridWidth - 2);
+            // 检查底部两格是否被占用（y=0 和 y=0）
+            while (grid[distance, 0].isOccupied || grid[distance + 1, 0].isOccupied)
+            {
+                distance = Random.Range(1, gridWidth - 2);
+            }
+            if (!grid[distance, 0].isOccupied && !grid[distance + 1, 0].isOccupied)
+            {
+                // 在底部生成Boss部件（坐标y=0）
+                SetCell(distance, 0, boss_part_one, "boss_part_one", "", false);       // 右下
+                SetCell(distance + 1, 0, boss_part_two, "boss_part_two", "", false);  // 左下
+                SetCell(distance, 1, boss_part_three, "boss_part_three", "", false);  // 右上
+                SetCell(distance + 1, 1, boss_part_four, "boss_part_four", "", false);// 左上
+            }
+        }
+        else if (direction == 4) // 左边（Left）
+        {
+            int distance = Random.Range(1, gridHeight - 2);
+            // 检查左侧两格是否被占用（x=0 和 x=0）
+            while (grid[0, distance].isOccupied || grid[0, distance + 1].isOccupied)
+            {
+                distance = Random.Range(1, gridHeight - 2);
+            }
+            if (!grid[0, distance].isOccupied && !grid[0, distance + 1].isOccupied)
+            {
+                // 在左侧生成Boss部件（坐标x=0）
+                SetCell(0, distance, boss_part_one, "boss_part_one", "", false);       // 左上
+                SetCell(0, distance + 1, boss_part_two, "boss_part_two", "", false);  // 左下
+                SetCell(1, distance, boss_part_three, "boss_part_three", "", false);   // 右上
+                SetCell(1, distance + 1, boss_part_four, "boss_part_four", "", false); // 右下
+            }
+        }
+    }
 
     // Create a background tile at the given position
     void CreateBackgroundTile(Vector3 position)
@@ -178,6 +282,23 @@ public class GridManager : MonoBehaviour
         }
     }
 
+    public void SetBossMovementPrediction(Vector2Int predictionPos)
+    {
+        if (grid[predictionPos.x, predictionPos.y].movementMark != "bossMovementSign")
+        {
+            Vector3 spawnPos = gridOrigin + new Vector3(
+                 predictionPos.x * cellSize,
+                 predictionPos.y * cellSize,
+                 0
+             );
+
+            GameObject PredictionSign = Instantiate(mateSign, spawnPos, Quaternion.identity);
+            PredictionSign.transform.parent = transform;
+            grid[predictionPos.x, predictionPos.y].movementMark = "bossMovementSign";
+        }
+        
+    }
+
     public void ClearAllHightlights()
     {
         for (int x = 0; x < gridWidth; x++)
@@ -236,8 +357,6 @@ public class GridManager : MonoBehaviour
                 }
             }
         }
-
-        
     }
 
     public int CountSorroundingGridsOfObjectType(GridCell [,] grid, int x, int y, string objectType)

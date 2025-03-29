@@ -8,7 +8,8 @@ public class GridCell
     public int action;
     public string backgroundType;
     public bool hasBackground;
-    public GridCell(GameObject content, bool isOccupied, string objectType, int action, string backgroundType, bool hasBackground)
+    public string movementMark;
+    public GridCell(GameObject content, bool isOccupied, string objectType, int action, string backgroundType, bool hasBackground, string movementMark = "")
     {
         this.content = content;
         this.isOccupied = isOccupied;
@@ -16,6 +17,7 @@ public class GridCell
         this.action = action;
         this.backgroundType = backgroundType;
         this.hasBackground = hasBackground;
+        this.movementMark = movementMark;
     }
 
 }

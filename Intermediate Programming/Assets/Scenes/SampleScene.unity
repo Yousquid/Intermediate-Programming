@@ -835,6 +835,12 @@ MonoBehaviour:
   grass: {fileID: 2364012115976869068, guid: a7adb100e02352947a15e7655c0c1750, type: 3}
   rabbit: {fileID: 5129280481589890241, guid: 2b58d2a4af9839944b42cbd6161eb126, type: 3}
   wolf: {fileID: 5129280481589890241, guid: 74564bfdd2e33fb478c4d61c43ef483b, type: 3}
+  boss_part_one: {fileID: 5129280481589890241, guid: aaed228f90d36b64d893a8b191a4e297, type: 3}
+  boss_part_two: {fileID: 5129280481589890241, guid: ba53ae58522ee53408a806024a1ca7da, type: 3}
+  boss_part_three: {fileID: 5129280481589890241, guid: 2deb0b7d0dfe1b04482ca6881fddb3cc, type: 3}
+  boss_part_four: {fileID: 5129280481589890241, guid: d8289ba980054154a87af1ab8c7033bd, type: 3}
+  bossPartOnePos: {x: 0, y: 0}
+  bossPartFourPos: {x: 0, y: 0}
   highlight: {fileID: 5906072111708575052, guid: 8fe903177cb6ae245830a9b769bc91de, type: 3}
   mateSign: {fileID: 3745479812649456072, guid: 09fd026581356734c9d2905a29487b9a, type: 3}
   hole: {fileID: 5069818874188259161, guid: 9b0f8a07e2e18e6458bc77b7167292f8, type: 3}

@@ -40,14 +40,18 @@ public class UIManager : MonoBehaviour
     public void ShowAnimalUI(string animalType)
     {
         animalSpecialAbilityButton.SetActive(true);
-        
+
         if (animalType == "rabbit")
         {
             animalSpecialAbilityButtonText.text = "Dig Hole";
         }
         else if (animalType == "")
-        { 
-        
+        {
+
+        }
+        else if (animalType == "wolf")
+        {
+            animalSpecialAbilityButtonText.text = "Wolfpack Power";
         }
     }
 
