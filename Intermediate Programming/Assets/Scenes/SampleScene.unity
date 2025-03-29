@@ -827,13 +827,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3debec79dafdeac469cfffd8c368a55a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridWidth: 10
+  gridWidth: 12
   gridHeight: 10
   backgroundPrefab: {fileID: 5783009509941869197, guid: 0bbe955b5b4150744bcd673388ace7eb, type: 3}
   cellSize: 0.9
-  gridOrigin: {x: -4, y: -4, z: 0}
+  gridOrigin: {x: -4.5, y: -4, z: 0}
   grass: {fileID: 2364012115976869068, guid: a7adb100e02352947a15e7655c0c1750, type: 3}
   rabbit: {fileID: 5129280481589890241, guid: 2b58d2a4af9839944b42cbd6161eb126, type: 3}
+  wolf: {fileID: 5129280481589890241, guid: 74564bfdd2e33fb478c4d61c43ef483b, type: 3}
   highlight: {fileID: 5906072111708575052, guid: 8fe903177cb6ae245830a9b769bc91de, type: 3}
   mateSign: {fileID: 3745479812649456072, guid: 09fd026581356734c9d2905a29487b9a, type: 3}
   hole: {fileID: 5069818874188259161, guid: 9b0f8a07e2e18e6458bc77b7167292f8, type: 3}

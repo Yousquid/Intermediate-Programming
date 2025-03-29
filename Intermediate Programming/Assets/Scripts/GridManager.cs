@@ -15,7 +15,10 @@ public class GridManager : MonoBehaviour
     public GameObject[,] gridObject;
 
     public GameObject grass;
+
     public GameObject rabbit;
+    public GameObject wolf;
+
     public GameObject highlight;
     public GameObject mateSign;
     public GameObject hole;
@@ -42,7 +45,7 @@ public class GridManager : MonoBehaviour
             SetCell(Random.Range(0, gridWidth), Random.Range(0, gridHeight), grass,  "grass","",false);
            
             SetCell(2, 3, grass,  "grass","",false);
-            SetCell(Random.Range(0, gridWidth), Random.Range(0, gridHeight), rabbit,  "rabbit","",false);
+            SetCell(Random.Range(0, gridWidth), Random.Range(0, gridHeight), wolf,  "wolf","",false);
 
             
         }
@@ -54,13 +57,14 @@ public class GridManager : MonoBehaviour
         {
             for (int y = 0; y < gridHeight; y++)
             {
-                grid[x, y] = new GridCell(null,false,"",0,"",false);
-                SetCell(x, y, null, "","",false);
-                Vector3 position = new Vector3(x * cellSize, y * cellSize, 0); // Calculate position of the background sprite
-                CreateBackgroundTile(position);
+                grid[x, y] = new GridCell(null, false, "", 0, "", false);
+                SetCell(x, y, null, "", "", false);
+                // 计算本地坐标后加上 gridOrigin
+                Vector3 localPosition = new Vector3(x * cellSize, y * cellSize, 0);
+                CreateBackgroundTile(localPosition);
             }
         }
-        
+
     }
 
     void GridImageUpdate()
@@ -69,29 +73,36 @@ public class GridManager : MonoBehaviour
         {
             for (int y = 0; y < gridHeight; y++)
             {
-              
                 if (grid[x, y].content == grass && !grid[x, y].isOccupied)
                 {
-                    //"-4" means the offset of the camera center, same with the value at the start
-                    GameObject Grass = Instantiate(grass, new Vector3(x * cellSize -4, y * cellSize-4, 0), Quaternion.identity);
+                    // 使用 gridOrigin 计算世界坐标
+                    Vector3 spawnPos = gridOrigin + new Vector3(x * cellSize, y * cellSize, 0);
+                    GameObject Grass = Instantiate(grass, spawnPos, Quaternion.identity);
                     Grass.transform.parent = transform;
                     grid[x, y].isOccupied = true;
-                    
                 }
                 else if (grid[x, y].content == rabbit && !grid[x, y].isOccupied)
                 {
-                    GameObject Rabbit = Instantiate(rabbit, new Vector3(x * cellSize-4, y * cellSize-4, 0), Quaternion.identity);
+                    Vector3 spawnPos = gridOrigin + new Vector3(x * cellSize, y * cellSize, 0);
+                    GameObject Rabbit = Instantiate(rabbit, spawnPos, Quaternion.identity);
+                    Rabbit.transform.parent = transform;
+                    grid[x, y].isOccupied = true;
+                }
+                else if (grid[x, y].content == wolf && !grid[x, y].isOccupied)
+                {
+                    Vector3 spawnPos = gridOrigin + new Vector3(x * cellSize, y * cellSize, 0);
+                    GameObject Rabbit = Instantiate(wolf, spawnPos, Quaternion.identity);
                     Rabbit.transform.parent = transform;
                     grid[x, y].isOccupied = true;
                 }
 
-                if (grid[x, y].backgroundType == "hole" && !grid[x,y].hasBackground)
+                if (grid[x, y].backgroundType == "hole" && !grid[x, y].hasBackground)
                 {
-                    GameObject Hole = Instantiate(hole, new Vector3(x * cellSize - 4, y * cellSize - 4, 0), Quaternion.identity);
+                    Vector3 spawnPos = gridOrigin + new Vector3(x * cellSize, y * cellSize, 0);
+                    GameObject Hole = Instantiate(hole, spawnPos, Quaternion.identity);
                     Hole.transform.parent = transform;
                     grid[x, y].hasBackground = true;
                 }
-
             }
         }
     }
@@ -101,9 +112,10 @@ public class GridManager : MonoBehaviour
     // Create a background tile at the given position
     void CreateBackgroundTile(Vector3 position)
     {
-        GameObject backgroundTile = Instantiate(backgroundPrefab, position, Quaternion.identity);
-        backgroundTile.transform.parent = transform;  // Make it a child of the GridManager for easier management
-        backgroundTile.name = "BackgroundTile_" + position.ToString();
+        Vector3 worldPosition = gridOrigin + position;
+        GameObject backgroundTile = Instantiate(backgroundPrefab, worldPosition, Quaternion.identity);
+        backgroundTile.transform.parent = transform;
+        backgroundTile.name = "BackgroundTile_" + worldPosition.ToString();
     }
 
     // Set the content of a specific grid cell
@@ -136,17 +148,31 @@ public class GridManager : MonoBehaviour
     {
         if (grid[highlightPos.x, highlightPos.y].content != highlight && !grid[highlightPos.x, highlightPos.y].isOccupied)
         {
-            GameObject Hightlight = Instantiate(highlight, new Vector3(highlightPos.x * cellSize - 4, highlightPos.y * cellSize - 4, 0), Quaternion.identity);
+            // 使用 gridOrigin 计算坐标
+            Vector3 spawnPos = gridOrigin + new Vector3(
+                highlightPos.x * cellSize,
+                highlightPos.y * cellSize,
+                0
+            );
+
+            GameObject Hightlight = Instantiate(highlight, spawnPos, Quaternion.identity);
             grid[highlightPos.x, highlightPos.y].content = highlight;
             Hightlight.transform.parent = transform;
         }
-        
+
     }
     public void SetCellMateSign(Vector2Int highlightPos)
     {
         if (!hasMateSignSpawned)
         {
-            GameObject MateSign = Instantiate(mateSign, new Vector3(highlightPos.x * cellSize - 4, highlightPos.y * cellSize - 4, 0), Quaternion.identity);
+            // 使用 gridOrigin 计算坐标
+            Vector3 spawnPos = gridOrigin + new Vector3(
+                highlightPos.x * cellSize,
+                highlightPos.y * cellSize,
+                0
+            );
+
+            GameObject MateSign = Instantiate(mateSign, spawnPos, Quaternion.identity);
             MateSign.transform.parent = transform;
             hasMateSignSpawned = true;
         }

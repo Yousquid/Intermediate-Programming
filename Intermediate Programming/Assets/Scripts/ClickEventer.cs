@@ -169,6 +169,63 @@ public class ClickEventer : MonoBehaviour
             }
         }
 
+        if (gridManager.grid[firstObjectPos.x, firstObjectPos.y].objectType == "wolf" &&
+            gridManager.grid[firstObjectPos.x, firstObjectPos.y].action > 0)
+        {
+
+            //Mate wolf
+            if (ValidAnimalMove("wolf", firstObjectPos, secondObjectPos) &&
+                gridManager.grid[firstObjectPos.x, firstObjectPos.y].objectType ==
+                gridManager.grid[secondObjectPos.x, secondObjectPos.y].objectType)
+            {
+                for (int x = -1; x < 2; x++)
+                {
+                    for (int y = -1; y < 2; y++)
+                    {
+                        if (!gridManager.grid[firstObjectPos.x + x, firstObjectPos.y + y].isOccupied)
+                        {
+                            if (x != 0 && y != 0)
+                            {
+                                if (gridManager.grid[firstObjectPos.x + x, firstObjectPos.y + y].backgroundType != "")
+                                {
+                                    string backgroundType = gridManager.grid[firstObjectPos.x + x, firstObjectPos.y + y].backgroundType;
+
+                                    if (gridManager.grid[firstObjectPos.x + x, firstObjectPos.y + y].hasBackground != false)
+                                    {
+                                        bool hasBackground = gridManager.grid[firstObjectPos.x + x, firstObjectPos.y + y].hasBackground;
+
+                                        gridManager.SetCell(firstObjectPos.x + x, firstObjectPos.y + y, gridManager.wolf, "wolf", backgroundType, hasBackground);
+                                        gridManager.grid[firstObjectPos.x, firstObjectPos.y].action -= 1;
+                                        gridManager.grid[firstObjectPos.x + x, firstObjectPos.y + y].action--;
+                                        gridManager.grid[secondObjectPos.x, secondObjectPos.y].action--;
+                                    }
+                                }
+                                else
+                                {
+                                    gridManager.SetCell(firstObjectPos.x + x, firstObjectPos.y + y, gridManager.wolf, "wolf", "", false);
+                                    gridManager.grid[firstObjectPos.x, firstObjectPos.y].action -= 1;
+                                    gridManager.grid[firstObjectPos.x + x, firstObjectPos.y + y].action--;
+                                    gridManager.grid[secondObjectPos.x, secondObjectPos.y].action--;
+                                }
+
+
+                                break;
+                            }
+
+                        }
+                    }
+                    break;
+                }
+            }
+
+            else if (ValidAnimalMove("wolf", firstObjectPos, secondObjectPos))
+            {
+                //Move the wolf
+                objectToMove = firstObjectClicked;
+                MoveObjectToGrid(secondObjectPos);
+            }
+
+        }
         
         ClearAllClickedObjects();
     }
@@ -239,6 +296,24 @@ public class ClickEventer : MonoBehaviour
                 new Vector2Int(position.x + 1, position.y),
                 new Vector2Int(position.x, position.y + 1),
                 new Vector2Int(position.x, position.y - 1)
+            };
+        }
+        else if (animalType == "wolf")
+        {
+            return new[]
+            {
+                new Vector2Int(position.x - 1, position.y),
+                new Vector2Int(position.x + 1, position.y),
+                new Vector2Int(position.x, position.y + 1),
+                new Vector2Int(position.x, position.y - 1),
+                new Vector2Int(position.x - 2, position.y),
+                new Vector2Int(position.x + 2, position.y),
+                new Vector2Int(position.x, position.y + 2),
+                new Vector2Int(position.x, position.y - 2),
+                new Vector2Int(position.x - 1, position.y+1),
+                new Vector2Int(position.x - 1, position.y-1),
+                new Vector2Int(position.x + 1, position.y + 1),
+                new Vector2Int(position.x + 1, position.y - 1)
             };
         }
         return new Vector2Int[0];
